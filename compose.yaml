@@ -1,0 +1,8 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      # Passed on from the shell or from a .env file next to this file, only when set.
+      - MUGLOAR_BASEURL

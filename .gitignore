@@ -1,0 +1,13 @@
+# Secrets and local configuration
+.env*
+!.env.example
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Tool state
+.claude/
