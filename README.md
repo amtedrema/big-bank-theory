@@ -2,6 +2,8 @@
 
 A bot and a web app that play [Dragons of Mugloar](https://dragonsofmugloar.com/) with one shared strategy. Built as a Bigbank test task covering both adventures.
 
+The web app lets you start a game, solve ads and buy items while it shows score, gold and lives. It shows each ad's estimated chance and expected value, recommends the next move and can play by itself.
+
 ## Running
 
 With Docker, no local Java or Node needed:
@@ -45,6 +47,8 @@ The backend keeps no game state. The browser keeps its copy in `sessionStorage`,
 
 The Mugloar API differs from its docs, so `MugloarClient` validates its responses and turns its HTML errors into typed errors. The REST API validates its input and returns errors as `application/problem+json` with a `code`. The web app never repeats a move after an error, because a lost answer can hide a move that did happen. The bot waits out an unavailable server and then decides its move again.
 
+The layout uses CSS breakpoints and no browser-specific code. An agent checked it in headless Chrome at widths 320 to 1280 px and played through it, and an auto-play game on an earlier build passed 1000 points.
+
 ## Strategy
 
 The bot and the web app's advice use the same rules, in this order:
@@ -52,6 +56,8 @@ The bot and the web app's advice use the same rules, in this order:
 1. At 1 life or fewer, buy a healing potion if gold allows.
 2. While some ad on offer is not certain and gold covers the next level item plus 50, buy that item.
 3. Otherwise solve the ad with the highest expected value, `p * reward - (1 - p) * 454`, with `p` from the ad's difficulty label. `Steal` ads have another 454 taken off and known trap ads get `p = 0`.
+
+Trap ads are ads whose message starts with `Steal super awesome diamond`. They were solved 0 of 29 times.
 
 The success rates come from real games and 454 was tuned on them. The measuring code is not in this repository. In those games rewards grew with the level, and ads got harder with each turn and easier with each level, which is why rule 2 keeps buying. Solved `Steal` ads seem to bring trap ads later, but this is unproven.
 
@@ -71,6 +77,8 @@ The success rates come from real games and 454 was tuned on them. The measuring 
 | Current code | none | 71,304,209, stopped by hand at turn 6,530 with lives left |
 
 All 7 passed 1000 points. 3 of them died at turns 86 to 162. One game stopped at turn 13 when its target was dropped is left out. The sample is small because long games take thousands of requests.
+
+The results come from the bot. The 3 games died between levels 15 and about 100, where income is too low to keep up with the difficulty.
 
 ## Use of AI tools
 
